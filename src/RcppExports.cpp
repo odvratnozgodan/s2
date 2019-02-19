@@ -51,6 +51,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// S2CellIdFromLatLng
+List S2CellIdFromLatLng(NumericMatrix x, IntegerVector level);
+RcppExport SEXP _s2_S2CellIdFromLatLng(SEXP xSEXP, SEXP levelSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type level(levelSEXP);
+    rcpp_result_gen = Rcpp::wrap(S2CellIdFromLatLng(x, level));
+    return rcpp_result_gen;
+END_RCPP
+}
 // S2CellIdFromPoint
 List S2CellIdFromPoint(NumericMatrix x, IntegerVector level);
 RcppExport SEXP _s2_S2CellIdFromPoint(SEXP xSEXP, SEXP levelSEXP) {
@@ -288,6 +300,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_s2_S2Cap_area", (DL_FUNC) &_s2_S2Cap_area, 1},
     {"_s2_S2Cap_GetRectBound", (DL_FUNC) &_s2_S2Cap_GetRectBound, 1},
     {"_s2_S2CellIdFromPoint", (DL_FUNC) &_s2_S2CellIdFromPoint, 2},
+    {"_s2_S2CellIdFromLatLng", (DL_FUNC) &_s2_S2CellIdFromLatLng, 2},
     {"_s2_S2CellId_ToPoint", (DL_FUNC) &_s2_S2CellId_ToPoint, 1},
     {"_s2_S2CellId_ToString", (DL_FUNC) &_s2_S2CellId_ToString, 1},
     {"_s2_S2Cell_vertices_from_token", (DL_FUNC) &_s2_S2Cell_vertices_from_token, 1},

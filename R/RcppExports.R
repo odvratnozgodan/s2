@@ -50,6 +50,20 @@ S2CellIdFromPoint <- function(x, level = 30L) {
     .Call(`_s2_S2CellIdFromPoint`, x, level)
 }
 
+#' Make a Vector of S2CellIds From Points on the Sphere
+#'
+#' Create a vector of S2CellIds corresponding to the cells at the given level 
+#' containing the given points. The default level (30) corresponds to leaf
+#' cells (finest level).
+#'
+#' @param x list of S2LatLng
+#' @param level Integer between 0 and 30 (incl).
+#' @return An object of class `S2CellId`.
+#' @export S2CellIdFromLatLng
+S2CellIdFromLatLng <- function(x, level = 30L) {
+	.Call(`_s2_S2CellIdFromLLatLng`, x, level)
+}
+
 #' Convert S2CellId to a S2Point
 #'
 #' Convert S2CellId to a S2Point

@@ -37,6 +37,31 @@ std::vector<S2CellId> S2CellId_FromS2Point(std::vector<S2Point> x, IntegerVector
   return rslt;
 }
 
+std::vector<S2CellId> S2CellId_FromLatLng(std::vector<S2LatLng> x, IntegerVector level){
+  int n = x.size();
+  int nlev = level.size();
+  int lev = level[0];
+  std::vector<S2CellId> rslt(n);
+  if(nlev == 1 & lev == 30){
+    // Default case of single level == 30
+    for(int i=0; i<n; i++){
+      rslt[i] = S2CellId::FromLatLng(x[i]);
+    }
+  } else{
+    // Generic case
+    for(int i=0; i<n; i++){
+      if(nlev > 1){
+        lev = level[i];
+      }
+      rslt[i] = S2CellId::FromLatLng(x[i]);
+      if(lev!=30){
+        rslt[i] = rslt[i].parent(lev);
+      }
+    }
+  }
+  return rslt;
+}
+
 List S2CellIdWrapForR(std::vector<S2CellId> ids, IntegerVector levels){
   int n = ids.size();
   CharacterVector tokens(n);
