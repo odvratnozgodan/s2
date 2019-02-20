@@ -37,31 +37,30 @@ std::vector<S2CellId> S2CellId_FromS2Point(std::vector<S2Point> x, IntegerVector
   return rslt;
 }
 
-std::vector<S2CellId> S2CellId_FromLatLng(std::vector<S2LatLng> x, IntegerVector level){
-  int n = x.size();
-  int nlev = level.size();
-  int lev = level[0];
-  std::vector<S2CellId> rslt(n);
-  if(nlev == 1 & lev == 30){
-    // Default case of single level == 30
-    for(int i=0; i<n; i++){
-      rslt[i] = S2CellId::FromLatLng(x[i]);
-    }
-  } else{
-    // Generic case
-    for(int i=0; i<n; i++){
-      if(nlev > 1){
-        lev = level[i];
-      }
-      rslt[i] = S2CellId::FromLatLng(x[i]);
-      if(lev!=30){
-        rslt[i] = rslt[i].parent(lev);
-      }
-    }
-  }
-  return rslt;
+std::vector<S2CellId> S2CellId_FromS2LatLng(std::vector<S2LatLng> x, IntegerVector level){
+	int n = x.size();
+	int nlev = level.size();
+	int lev = level[0];
+	std::vector<S2CellId> rslt(n);
+	if(nlev == 1 & lev == 30){
+		// Default case of single level == 30
+		for(int i=0; i<n; i++){
+			rslt[i] = S2CellId::FromLatLng(x[i]);
+		}
+	} else{
+		// Generic case
+		for(int i=0; i<n; i++){
+			if(nlev > 1){
+				lev = level[i];
+			}
+			rslt[i] = S2CellId::FromLatLng(x[i]);
+			if(lev!=30){
+				rslt[i] = rslt[i].parent(lev);
+			}
+		}
+	}
+	return rslt;
 }
-
 List S2CellIdWrapForR(std::vector<S2CellId> ids, IntegerVector levels){
   int n = ids.size();
   CharacterVector tokens(n);
@@ -128,6 +127,23 @@ NumericMatrix S2CellId_ToPoint(List x){
   return S2PointVecToR(output);
 }
 
+//' Make a Vector of S2CellIds From Points on the Sphere
+//'
+//' Create a vector of S2CellIds corresponding to the cells at the given level 
+//' containing the given points. The default level (30) corresponds to leaf
+//' cells (finest level).
+//'
+//' @param x Two-column matrix reprensenting the points.
+//' @param level Integer between 0 and 30 (incl).
+//' @return An object of class `S2CellId`.
+//' @export S2CellIdFromLatLng
+//[[Rcpp::export]]
+List S2CellIdFromLatLng(NumericMatrix x, IntegerVector level = 30){
+	auto points = S2LatLngVecFromR(x);
+	auto ids = S2CellId_FromS2LatLng(points, level);
+	return S2CellIdWrapForR(ids, level);
+}
+
 //' Make a vector of S2CellId strings
 //'
 //' Make a vector of S2CellId strings
@@ -151,6 +167,18 @@ std::vector<S2CellId> R_S2CellIdFromPoints(NumericMatrix mat, int level){
   // }
   // return ids;
   return S2CellId_FromS2Point(points, level);
+}
+
+std::vector<S2CellId> R_S2CellIdFromLatLngs(NumericMatrix mat, int level){
+	auto points = S2LatLngVecFromR(mat);
+	// int n = points.size();
+	// std::vector<S2CellId> ids(n);
+	// for(int i=0; i<n; i++){
+	//   S2CellId tmp = S2CellId::FromPoint(points[i]);
+	//   ids[i] = tmp.parent(level);
+	// }
+	// return ids;
+	return S2CellId_FromS2LatLng(points, level);
 }
 
 List S2Cell_vertices_from_id(std::vector<S2CellId> cellids){
@@ -181,6 +209,12 @@ List S2Cell_vertices_from_token(std::vector<std::string> tokens){
 List S2Cell_vertices_from_point(NumericMatrix mat, int level){
   auto cellids = R_S2CellIdFromPoints(mat, level);
   return S2Cell_vertices_from_id(cellids);
+}
+
+//[[Rcpp::export]]
+List S2Cell_vertices_from_latlng(NumericMatrix mat, int level){
+	auto cellids = R_S2CellIdFromLatLngs(mat, level);
+	return S2Cell_vertices_from_id(cellids);
 }
 
 //[[Rcpp::export]]
