@@ -7,7 +7,7 @@
 \title{s2: Google's S2 Library for Geometry on the Sphere}
 \description{
 R bindings for Google's s2 library for geometric calculations on
-the sphere.
+    the sphere.
 }
 \details{
 This package aims at providing bindings for the C++ library s2 for geometry
@@ -32,6 +32,7 @@ Useful links:
 Authors:
 \itemize{
   \item Jeroen Ooms \email{jeroen.ooms@stat.ucla.edu} (configure and cleanup script)
+  \item Edzer Pebesma \email{edzer.pebesma@uni-muenster.de} (Interface to sf)
 }
 
 Other contributors:
